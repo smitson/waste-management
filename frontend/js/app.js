@@ -1,5 +1,5 @@
 // Modern JavaScript for UK Waste Management & Compliance System v2.0
-import { renderBarChart } from './chart.js';
+// chart.js loaded as a separate script, renderBarChart is global
 
 class WasteManagementApp {
     constructor() {
@@ -695,12 +695,6 @@ class WasteManagementApp {
     }
 
     bindEvents() {
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const section = e.target.textContent.toLowerCase().replace(/\s+/g, '-');
-                this.showSection(section);
-            });
-        });
     }
 
     showSection(sectionName) {
@@ -709,7 +703,8 @@ class WasteManagementApp {
         if (target) { target.classList.add('section--active'); this.currentSection = sectionName; }
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.classList.remove('active');
-            if (btn.textContent.toLowerCase().replace(/\s+/g, '-') === sectionName) btn.classList.add('active');
+            const onclick = btn.getAttribute('onclick') || '';
+            if (onclick.includes("'" + sectionName + "'")) btn.classList.add('active');
         });
         this.loadSectionData(sectionName);
     }
